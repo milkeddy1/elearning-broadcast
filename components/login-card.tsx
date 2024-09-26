@@ -14,19 +14,45 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { useSnackbar } from "./snackbar-context";
+import { useRouter } from "next/navigation";
 
 export default function LoginCard() {
-  const [email, setEmail] = useState("");
+  const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { showSnackbar } = useSnackbar();
+  const router = useRouter();
+
+  const login = async (data: { username: string; password: string }) => {
+    const response = await axios.post("/api/login", data);
+    return response.data;
+  };
+
+  const { mutate: loginMutate, isPending } = useMutation({
+    mutationFn: login,
+    onSuccess: (data) => {
+      console.log(data);
+      showSnackbar("登入成功！", "success");
+      router.push("/");
+    },
+    onError: () => {
+      showSnackbar("登入失敗！", "error");
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    loginMutate({ username: account, password });
+    return;
+
     setError("");
 
     // 這裡應該是實際的登入邏輯
     // 這只是一個示例，實際應用中應該調用 API 進行身份驗證
-    if (email === "user@example.com" && password === "password") {
+    if (account === "user@example.com" && password === "password") {
       console.log("登入成功");
     } else {
       setError("電子郵件或密碼不正確");
@@ -42,13 +68,13 @@ export default function LoginCard() {
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">電子郵件</Label>
+            <Label htmlFor="account">帳號</Label>
             <Input
-              id="email"
+              id="account"
               type="email"
-              placeholder="your@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              placeholder="shenlearn@gmail.com"
+              value={account}
+              onChange={(e) => setAccount(e.target.value)}
               required
             />
           </div>
@@ -71,7 +97,7 @@ export default function LoginCard() {
           )}
         </CardContent>
         <CardFooter>
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" loading={isPending}>
             登入
           </Button>
         </CardFooter>
