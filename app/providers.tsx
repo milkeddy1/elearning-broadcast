@@ -4,6 +4,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { type ThemeProviderProps } from "next-themes/dist/types";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
+import { SnackbarProvider } from "@/components/snackbar-context";
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   const [queryClient] = useState(
@@ -21,7 +22,9 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+      <SnackbarProvider>
+        <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+      </SnackbarProvider>
     </QueryClientProvider>
   );
 }
