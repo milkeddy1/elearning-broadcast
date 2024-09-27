@@ -3,7 +3,7 @@ import MenuButton from "@/components/menu-button";
 import ThemeButton from "@/components/theme-button";
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
 
-export default function Header({ isLoggedIn = false }) {
+export default function Header({ isLoggedIn = true }) {
   return (
     <header className="p-4 flex justify-between items-center bg-background fixed w-full">
       <div className="flex items-center">{isLoggedIn && <MenuButton />}</div>

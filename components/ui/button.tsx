@@ -26,6 +26,10 @@ const buttonVariants = cva(
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
       },
+      status: {
+        loading: "cursor-not-allowed",
+        active: "bg-accent",
+      },
     },
     defaultVariants: {
       variant: "default",
@@ -51,6 +55,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       loading = false,
       children,
       disabled,
+      status,
       ...props
     },
     ref
@@ -58,7 +63,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }), {
+        className={cn(buttonVariants({ variant, size, className, status }), {
           "cursor-not-allowed opacity-50": loading,
         })}
         ref={ref}

@@ -1,51 +1,75 @@
 "use client";
 
-import React, { useState } from "react";
-import { Button } from "./ui/button";
-import { Link, Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import clsx from "clsx";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const menuList = [
+  { title: "首頁", href: "/" },
+  // { title: "影片列表", href: "/videos" },
+  // { title: "關於我們", href: "/about" },
+];
 
 export default function MenuButton() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
-    <div>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => setMenuOpen(!menuOpen)}
-        className="mr-2"
-      >
-        {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        <span className="sr-only">切換選單</span>
-      </Button>
-      {menuOpen && (
-        <nav className="w-64 bg-secondary p-4 space-y-2 absolute">
-          <Link
-            href="/dashboard"
-            className="block py-2 px-4 hover:bg-primary/10 rounded-md"
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="outline">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
           >
-            儀表板
-          </Link>
-          <Link
-            href="/profile"
-            className="block py-2 px-4 hover:bg-primary/10 rounded-md"
-          >
-            個人資料
-          </Link>
-          <Link
-            href="/settings"
-            className="block py-2 px-4 hover:bg-primary/10 rounded-md"
-          >
-            設置
-          </Link>
-          <Link
-            href="/logout"
-            className="block py-2 px-4 hover:bg-primary/10 rounded-md text-red-500"
-          >
-            登出
-          </Link>
-        </nav>
-      )}
-    </div>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16m-7 6h7"
+            />
+          </svg>
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="left">
+        <SheetHeader>
+          <SheetTitle>莘莘學院</SheetTitle>
+        </SheetHeader>
+
+        <br />
+
+        {/* menu list: home, video list etc. */}
+        <SheetDescription>
+          {menuList.map((menu) => {
+            return (
+              <Button
+                key={menu.href}
+                style={{ width: "100%", justifyContent: "start" }}
+                variant="ghost"
+                className={clsx(menu.href === pathname && "bg-accent")}
+              >
+                <Link
+                  style={{ width: "100%", textAlign: "start" }}
+                  href={menu.href}
+                >
+                  {menu.title}
+                </Link>
+              </Button>
+            );
+          })}
+        </SheetDescription>
+      </SheetContent>
+    </Sheet>
   );
 }
