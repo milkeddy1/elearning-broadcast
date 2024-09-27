@@ -12,6 +12,7 @@ import {
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Separator } from "./ui/separator";
 
 const menuList = [
   { title: "首頁", href: "/" },
@@ -46,9 +47,7 @@ export default function MenuButton() {
         <SheetHeader>
           <SheetTitle>莘莘學院</SheetTitle>
         </SheetHeader>
-
-        <br />
-
+        <Separator className="my-4" />
         {/* menu list: home, video list etc. */}
         <SheetDescription>
           {menuList.map((menu) => {
