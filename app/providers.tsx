@@ -23,7 +23,7 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <SnackbarProvider>
-        <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+        <NextThemesProvider {...props}>{children}</NextThemesProvider>
       </SnackbarProvider>
     </QueryClientProvider>
   );

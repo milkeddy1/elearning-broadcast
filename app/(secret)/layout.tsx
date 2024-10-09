@@ -5,7 +5,9 @@ import Header from "@/containers/header";
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <div>
-      <Header />
+      <div>
+        <Header />
+      </div>
       {children}
     </div>
   );

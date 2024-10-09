@@ -6,7 +6,7 @@ import UserMenu from "@/hooks/user-menu";
 
 export default function Header() {
   return (
-    <header className="p-4 flex justify-between items-center bg-background fixed w-full">
+    <header className="p-4 flex justify-between items-center bg-background w-full">
       <div className="flex items-center">
         <MenuButton />
       </div>
