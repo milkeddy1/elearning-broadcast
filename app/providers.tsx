@@ -17,7 +17,7 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
             staleTime: 60 * 1000,
           },
         },
-      })
+      }),
   );
 
   return (
