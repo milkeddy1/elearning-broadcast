@@ -20,11 +20,7 @@ export default function ThemeButton() {
     <div>
       {mounted && (
         <Button variant="outline" size="icon" onClick={handleChangeTheme}>
-          {theme === "dark" ? (
-            <Sun className="h-[1.2rem] w-[1.2rem]" />
-          ) : (
-            <Moon className="h-[1.2rem] w-[1.2rem]" />
-          )}
+          {theme === "dark" ? <Sun className="h-[1.2rem] w-[1.2rem]" /> : <Moon className="h-[1.2rem] w-[1.2rem]" />}
           <span className="sr-only">切換主題</span>
         </Button>
       )}

@@ -4,20 +4,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import { useSnackbar } from "./snackbar-context";
 import { useRouter } from "next/navigation";
+import { clientAxiosInstance } from "@/app/api";
 
 export default function LoginCard() {
   const [account, setAccount] = useState("");
@@ -27,7 +20,7 @@ export default function LoginCard() {
   const router = useRouter();
 
   const login = async (data: { username: string; password: string }) => {
-    const response = await axios.post("/api/login", data);
+    const response = await clientAxiosInstance.post("/api/login", data);
     return response.data;
   };
 
@@ -35,8 +28,11 @@ export default function LoginCard() {
     mutationFn: login,
     onSuccess: (data) => {
       console.log(data);
+      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
+      clientAxiosInstance.defaults.headers["Authorization"] = data.accessToken;
       showSnackbar("登入成功！", "success");
-      router.push("/");
+      router.push("/dashboard");
     },
     onError: () => {
       showSnackbar("登入失敗！", "error");
@@ -71,8 +67,8 @@ export default function LoginCard() {
             <Label htmlFor="account">帳號</Label>
             <Input
               id="account"
-              type="email"
-              placeholder="shenlearn@gmail.com"
+              type="text"
+              placeholder="學號"
               value={account}
               onChange={(e) => setAccount(e.target.value)}
               required
@@ -84,6 +80,7 @@ export default function LoginCard() {
               id="password"
               type="password"
               value={password}
+              placeholder="電話"
               onChange={(e) => setPassword(e.target.value)}
               required
             />
