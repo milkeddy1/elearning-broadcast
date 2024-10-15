@@ -1,15 +1,15 @@
 import axios from "axios";
 import { axiosInstance } from "..";
-import { headers } from "next/headers";
+import { NextRequest } from "next/server";
 
-export async function GET() {
-  const headersList = headers();
-  const token = headersList.get("authorization");
+export async function GET(request: NextRequest) {
+  // 取得 cookie
+  const accessToken = request.cookies.get("token")?.value;
 
   try {
     const res = await axiosInstance.get("/users/me", {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + accessToken,
       },
     });
 
