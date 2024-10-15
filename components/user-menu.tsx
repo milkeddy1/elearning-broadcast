@@ -1,5 +1,5 @@
 "use client";
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,27 +9,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, User } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { useRouter } from "nextjs-toploader/app";
 
-export default function UserMenu() {
+export default function UserMenu({ name }: { name: string }) {
   const router = useRouter();
   const handleLogout = () => {
     document.cookie = "token=; path=/; max-age=0";
     router.push("/login");
-    console.log("User logged out");
   };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="relative rounded-full">
+        <Button className="relative rounded-full px-[4px] py-4px]">
           <Avatar className="h-8 w-8">
-            {/* <AvatarImage
-              src="/placeholder.svg?height=32&width=32"
-              alt="@user"
-            /> */}
-            {/* <AvatarFallback>U</AvatarFallback> */}U
+            <AvatarFallback>U</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -37,14 +32,10 @@ export default function UserMenu() {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">用戶名稱</p>
-            <p className="text-xs leading-none text-muted-foreground">user@example.com</p>
+            <p className="text-xs leading-none text-muted-foreground">{name}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <User className="mr-2 h-4 w-4" />
-          <span>個人資料</span>
-        </DropdownMenuItem>
         <DropdownMenuItem onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>登出</span>
