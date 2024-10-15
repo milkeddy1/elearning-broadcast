@@ -9,7 +9,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { useSnackbar } from "./snackbar-context";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import { clientAxiosInstance } from "@/app/api";
 
 export default function LoginCard() {
