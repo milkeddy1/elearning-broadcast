@@ -10,13 +10,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LogOut, User } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 
 export default function UserMenu() {
   const router = useRouter();
-
   const handleLogout = () => {
-    // 在這裡實現登出邏輯
+    document.cookie = "token=; path=/; max-age=0";
     router.push("/login");
     console.log("User logged out");
   };
@@ -38,9 +37,7 @@ export default function UserMenu() {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">用戶名稱</p>
-            <p className="text-xs leading-none text-muted-foreground">
-              user@example.com
-            </p>
+            <p className="text-xs leading-none text-muted-foreground">user@example.com</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
