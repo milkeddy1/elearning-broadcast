@@ -23,7 +23,7 @@ export default function Header() {
       </div>
       <div className="flex items-center space-x-4 gap-4">
         <ThemeButton />
-        <UserMenu name={data.name} />
+        <UserMenu name={data?.name || ""} />
       </div>
     </header>
   );

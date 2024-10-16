@@ -19,12 +19,22 @@ export default function UserMenu({ name }: { name: string }) {
     router.push("/login");
   };
 
+  // first letter of the name
+
+  function getFirstLetter(name: string) {
+    const trimmedName = name.trim();
+
+    return trimmedName[0].toUpperCase();
+  }
+
+  const firstLetter = getFirstLetter(name);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button className="relative rounded-full px-[4px] py-4px]">
           <Avatar className="h-8 w-8">
-            <AvatarFallback>U</AvatarFallback>
+            <AvatarFallback>{firstLetter}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
