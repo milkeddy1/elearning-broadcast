@@ -22,6 +22,7 @@ export default function UserMenu({ name }: { name: string }) {
   // first letter of the name
 
   function getFirstLetter(name: string) {
+    if (!name) return "U";
     const trimmedName = name.trim();
 
     return trimmedName[0].toUpperCase();
