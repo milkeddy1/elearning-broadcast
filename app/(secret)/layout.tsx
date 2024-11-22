@@ -1,4 +1,3 @@
-import { ThemeProvider } from "../providers";
 import "../globals.css";
 import Header from "@/containers/header";
 
