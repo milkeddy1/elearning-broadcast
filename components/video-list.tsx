@@ -1,12 +1,15 @@
 "use client";
 import Image from "next/image";
-import { CalendarIcon, ClockIcon } from "lucide-react";
+import { CalendarIcon, ClockIcon, Video as VideoIcon } from "lucide-react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { clientAxiosInstance } from "@/app/api";
 import getPreviewImgs from "@/utils/getYTPreviewImage";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Spinner } from "./spinner";
 import { useInView } from "react-intersection-observer";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type VideoResponse = {
   data: {
@@ -29,7 +32,27 @@ type VideoResponse = {
 
 export default function VideoList() {
   const [queryLimit, setQueryLimit] = useState<number | null>(null);
-  console.log(queryLimit, "queryLimit");
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const searchKeyword = searchParams.get("keyword");
+  // Get a new searchParams string by merging the current
+  // searchParams with a provided key/value pair
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams],
+  );
+  console.log(searchParams, "searchParams");
+
+  const handleSubmit = () => {
+    router.push(pathname + "?" + createQueryString("keyword", searchQuery));
+  };
 
   const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
     queryKey: ["videos", { limit: queryLimit }],
@@ -56,7 +79,13 @@ export default function VideoList() {
     threshold: 0,
   });
 
-  const videos = data?.pages.map((i) => i.data).flat() || [];
+  const videos =
+    data?.pages
+      .map((i) => i.data)
+      .flat()
+      .filter((item) => {
+        return searchKeyword ? item.name.includes(searchKeyword) : item;
+      }) || [];
 
   const getImagesPerRow = () => {
     const width = window.innerWidth;
@@ -84,6 +113,29 @@ export default function VideoList() {
 
   return (
     <div className="flex gap-8 align-center flex-col">
+      <div className="flex justify-between w-full">
+        <h1 className="text-2xl font-bold mb-6">影片列表</h1>
+        <Button>重新整理</Button>
+      </div>
+
+      <div className="flex gap-4 w-full max-w-sm items-center space-x-2">
+        <Input
+          type="text"
+          placeholder="輸入搜索內容..."
+          name="keyword"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="flex-grow"
+          aria-label="搜索輸入"
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              handleSubmit();
+            }
+          }}
+        />
+        <Button onClick={handleSubmit}>搜索</Button>
+      </div>
+
       {isLoading ? (
         <div className="m-auto">
           <Spinner />
@@ -94,14 +146,21 @@ export default function VideoList() {
             {videos.map((video) => {
               return (
                 <div key={video.id} className="bg-background rounded-lg shadow-md overflow-hidden group border ">
-                  <div className="relative overflow-hidden">
-                    <Image
-                      className="transition-transform duration-300 ease-in-out group-hover:scale-110 w-full"
-                      src={getPreviewImgs(video.url)?.mq || ""}
-                      alt={video.name}
-                      height={180}
-                      width={200}
-                    />
+                  <div className="relative overflow-hidden w-full aspect-video">
+                    {getPreviewImgs(video.url)?.mq ? (
+                      <Image
+                        className="transition-transform duration-300 ease-in-out group-hover:scale-110 w-full"
+                        src={getPreviewImgs(video.url)?.mq || ""}
+                        alt={video.name}
+                        // height={180}
+                        // width={320}
+                        layout="fill"
+                      />
+                    ) : (
+                      <div className="h-full flex justify-center items-center">
+                        <VideoIcon size={100} />
+                      </div>
+                    )}
                   </div>
                   <div className="p-4">
                     <h2 className="text-xl font-semibold mb-2">{video.name}</h2>

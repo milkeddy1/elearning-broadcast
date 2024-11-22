@@ -7,7 +7,7 @@ export async function middleware(request: NextRequest) {
   const origin = request.nextUrl.origin;
   const accessToken = request.cookies.get("token")?.value;
 
-  if (reqPath === "/" || reqPath === "/login" || reqPath === "/dashboard") {
+  if (reqPath === "/" || reqPath === "/login" || reqPath.includes("/dashboard")) {
     // 不會有 / route 只有 /login 和 /dashboard
 
     try {
@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
         },
       });
 
-      if (reqPath === "/dashboard") {
+      if (reqPath.includes("/dashboard")) {
         return NextResponse.next();
       }
       return NextResponse.redirect(`${origin}/dashboard`);
